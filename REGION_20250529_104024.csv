@@ -1,0 +1,53 @@
+Test Number,Table Name,SQL Query,Status,Comment,Timestamp
+1,SNOWFLAKE_SAMPLE_DATA.TPCH_SF10.REGION,"/*==============================================================*/
+/* SECTION 1: PRIMARY KEY / UNIQUENESS TESTS                    */
+/*==============================================================*/
+SELECT 
+    R_REGIONKEY, 
+    COUNT(*) as duplicate_count
+FROM 
+    SNOWFLAKE_SAMPLE_DATA.TPCH_SF10.REGION
+GROUP BY 
+    R_REGIONKEY
+HAVING 
+    COUNT(*) > 1",PASSED,No duplicate values found - uniqueness constraint validated,2025-05-29 10:40:22
+2,SNOWFLAKE_SAMPLE_DATA.TPCH_SF10.REGION,"/*==============================================================*/
+/* SECTION 2: NULL VALUE ANALYSIS                               */
+/*==============================================================*/
+SELECT
+    SUM(CASE WHEN R_REGIONKEY IS NULL THEN 1 ELSE 0 END) AS null_regionkey_count,
+    SUM(CASE WHEN R_NAME IS NULL THEN 1 ELSE 0 END) AS null_name_count,
+    SUM(CASE WHEN R_COMMENT IS NULL THEN 1 ELSE 0 END) AS null_comment_count
+FROM
+    SNOWFLAKE_SAMPLE_DATA.TPCH_SF10.REGION",PASSED,No unexpected NULL values detected - data completeness verified,2025-05-29 10:40:22
+3,SNOWFLAKE_SAMPLE_DATA.TPCH_SF10.REGION,"/*==============================================================*/
+/* SECTION 3: DATA TYPE AND FORMAT VALIDATION                   */
+/*==============================================================*/
+SELECT
+    R_REGIONKEY,
+    R_NAME,
+    LENGTH(R_NAME) AS name_length
+FROM
+    SNOWFLAKE_SAMPLE_DATA.TPCH_SF10.REGION
+WHERE
+    LENGTH(TRIM(R_NAME)) = 0
+    OR LENGTH(R_NAME) > 25",PASSED,All values within expected ranges - boundary validation passed,2025-05-29 10:40:23
+4,SNOWFLAKE_SAMPLE_DATA.TPCH_SF10.REGION,"/*==============================================================*/
+/* SECTION 4: BUSINESS RULE VALIDATION                          */
+/*==============================================================*/
+SELECT
+    COUNT(*) AS region_count,
+    COUNT(CASE WHEN R_NAME = 'AFRICA' THEN 1 END) AS africa_count,
+    COUNT(CASE WHEN R_NAME = 'AMERICA' THEN 1 END) AS america_count,
+    COUNT(CASE WHEN R_NAME = 'ASIA' THEN 1 END) AS asia_count,
+    COUNT(CASE WHEN R_NAME = 'EUROPE' THEN 1 END) AS europe_count,
+    COUNT(CASE WHEN R_NAME = 'MIDDLE EAST' THEN 1 END) AS middle_east_count
+FROM
+    SNOWFLAKE_SAMPLE_DATA.TPCH_SF10.REGION",PASSED,No issues found - validation successful,2025-05-29 10:40:23
+5,SNOWFLAKE_SAMPLE_DATA.TPCH_SF10.REGION,"SELECT
+    R_REGIONKEY,
+    R_NAME
+FROM
+    SNOWFLAKE_SAMPLE_DATA.TPCH_SF10.REGION
+WHERE
+    R_REGIONKEY < 0 OR R_REGIONKEY > 4",PASSED,All values within expected ranges - boundary validation passed,2025-05-29 10:40:24
