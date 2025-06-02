@@ -85,7 +85,7 @@ class GithubCollector:
             logger.warning("GitHub client not initialized or no repositories configured")
             return []
         
-        yesterday = datetime.now() - timedelta(days=1)
+        yesterday = datetime.now(datetime.timezone.utc) - timedelta(days=1)
         merged_prs = []
         
         try:
