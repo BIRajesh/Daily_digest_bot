@@ -7,6 +7,8 @@ from github import Github
 from dotenv import load_dotenv
 from utils.ai_summarizer import BedrockSummarizer
 
+
+
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
