@@ -1,5 +1,7 @@
 -- Sample procedure to record a new digest entry and return its ID
 
+
+
 CREATE OR REPLACE PROCEDURE record_new_digest(
     p_team_name VARCHAR(100),
     p_summary_text TEXT,
